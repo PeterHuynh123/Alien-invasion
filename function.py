@@ -88,8 +88,16 @@ def create_fleet(screen, game_settings, aliens, ship):
         for alien_index in range(total_aliens_on_a_row):
             create_new_alien(screen, game_settings, aliens, alien_index, alien_width, row)
 
-def update_fleet(aliens, screen):
-    aliens.update(screen)
-    
-    # space = screen width - (gap * width of 1 alien)
-    # tt num of aliens that can fits on on line 1 row = tt space/(gap*width of 1 alien)
+def change_fleet_direction(game_settings, aliens):
+    for each_alien in aliens.sprites():
+        each_alien.rect.y += game_settings.alien_fleet_drop_speed
+    game_settings.alien_fleet_direction = -game_settings.alien_fleet_direction
+
+def check_collision(game_settings, aliens):
+    for each_alien in aliens.sprites():
+        if each_alien.check_collision():
+            change_fleet_direction(game_settings, aliens)
+        
+def update_fleet(game_settings, aliens):
+    check_collision(game_settings, aliens)
+    aliens.update()

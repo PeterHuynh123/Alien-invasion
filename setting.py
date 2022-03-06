@@ -11,4 +11,7 @@ class Setting():
         self.bullet_speed = 2
         self.bullet_cl = 80, 80, 80
         self.bullet_max_allowed = 5
-    
+
+        self.alien_speed = 1
+        self.alien_fleet_direction = 1 #-1 is left
+        self.alien_fleet_drop_speed = 2
