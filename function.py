@@ -55,7 +55,7 @@ def update_bullets(bullets, aliens):
         if bullet.rect.bottom < 0 :
             bullets.remove(bullet)
         for each_alien in aliens.copy():
-            if each_alien.rect.bottom == bullet.rect.top:
+            if each_alien.rect.y >= bullet.rect.top and each_alien.rect.y <= bullet.rect.bottom:
                 if bullet.rect.x >= each_alien.rect.left and bullet.rect.x <= each_alien.rect.right:
                     aliens.remove(each_alien)
 

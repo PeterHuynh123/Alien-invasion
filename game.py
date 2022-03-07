@@ -35,6 +35,7 @@ def main():
 
         func.update_screen(game_setting, ship, window, bullets, aliens)
         
+        clock.tick(60)
 
 
         
