@@ -1,4 +1,3 @@
-from turtle import screensize
 from bullet import Bullet
 import pygame
 import sys
@@ -51,10 +50,14 @@ def update_screen(game_setting, ship, window, bullets, aliens):
 
     
 
-def update_bullets(bullets):
+def update_bullets(bullets, aliens):
     for bullet in bullets.copy():
         if bullet.rect.bottom < 0 :
             bullets.remove(bullet)
+        for each_alien in aliens.copy():
+            if each_alien.rect.bottom == bullet.rect.top:
+                if bullet.rect.x >= each_alien.rect.left and bullet.rect.x <= each_alien.rect.right:
+                    aliens.remove(each_alien)
 
 def get_total_num_of_aliens_on_a_row(game_settings, alien, alien_width, gap):
     available_space = game_settings.screen_width -  alien_width

@@ -29,7 +29,7 @@ def main():
         ship.update()
         bullets.update()
 
-        func.update_bullets(bullets)
+        func.update_bullets(bullets, aliens)
 
         func.update_fleet(game_setting, aliens)
 
