@@ -58,6 +58,7 @@ def update_bullets(bullets, aliens):
             if each_alien.rect.y >= bullet.rect.top and each_alien.rect.y <= bullet.rect.bottom:
                 if bullet.rect.x >= each_alien.rect.left and bullet.rect.x <= each_alien.rect.right:
                     aliens.remove(each_alien)
+                    bullets.remove(bullet)
 
 def get_total_num_of_aliens_on_a_row(game_settings, alien, alien_width, gap):
     available_space = game_settings.screen_width -  alien_width
@@ -100,6 +101,7 @@ def check_collision(game_settings, aliens):
     for each_alien in aliens.sprites():
         if each_alien.check_collision():
             change_fleet_direction(game_settings, aliens)
+            break
         
 def update_fleet(game_settings, aliens):
     check_collision(game_settings, aliens)

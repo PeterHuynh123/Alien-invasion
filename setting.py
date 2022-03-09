@@ -8,10 +8,10 @@ class Setting():
 
         self.bullet_width = 5
         self.bullet_height = 10
-        self.bullet_speed = 5
-        self.bullet_cl = 80, 80, 80
-        self.bullet_max_allowed = 5
+        self.bullet_speed = 10
+        self.bullet_cl = 255, 0, 0
+        self.bullet_max_allowed = 3
 
-        self.alien_speed = 5
+        self.alien_speed = 3
         self.alien_fleet_direction = 1 #-1 is left
-        self.alien_fleet_drop_speed = 2
+        self.alien_fleet_drop_speed = 4
