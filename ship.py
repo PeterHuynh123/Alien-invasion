@@ -27,4 +27,4 @@ class Ship():
         self.screen.blit(self.sprite, self.rect)
 
     def center_ship(self):
-        self.center = self.screen_rect.centerx
+        self.rect.centerx = self.screen_rect.centerx

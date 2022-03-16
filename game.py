@@ -10,7 +10,6 @@ from Stats import Stats
 from pygame.sprite import Group
 
 from time import sleep
-
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -29,9 +28,11 @@ def main():
 
     func.create_fleet(screen, game_setting, aliens, ship)
 
-    btn_play = Button(screen, game_setting, "PLAY!!") 
-
+    btn_play = Button(screen, "PLAY!!") 
+    
+    pygame.mouse.set_visible(False)
     while True:
+        
         func.check_event(ship, game_setting, screen, bullets, btn_play, game_stats, aliens, game_setting)
         if game_stats.game_over == False:
             btn_play.draw()
@@ -48,7 +49,6 @@ def main():
         
         else:
             pygame.display.flip()
-            print("gameover")
 
 
         

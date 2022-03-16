@@ -33,30 +33,43 @@ def check_event(ship, game_setting, screen, bullets, btn_play, game_stats, alien
 
         if event.type == pygame.KEYDOWN:
             check_kd_event(event, ship, game_setting, screen, bullets)
+            if event.key == pygame.K_RETURN and game_stats.game_over == True:
+                play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings, ship)
         elif event.type == pygame.KEYUP:
             check_ku_event(event, ship)
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            if btn_play.rect.collidepoint(mouse_x, mouse_y):
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        if btn_play.rect.collidepoint(mouse_x, mouse_y):
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings, ship)
+            else:
+                pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
+                print("hover")
+                btn_play.bg_color = (40, 101, 158)
+                btn_play.display_message("Play!")
+                update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats)
                 
-
-        
-        
+        else:
+            pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
+            btn_play.bg_color = (50, 111, 168)
+            btn_play.display_message("Play!")
+            update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats)
             
 
 """update scr"""
 
 def play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings, ship):
-    game_stats.game_over = False
-    game_stats.reset_statistic()
+    if game_stats.game_over == True:
+        
+        game_stats.game_over = False
+        game_stats.reset_statistic()
 
-    aliens.empty()
-    bullets.empty()
+        aliens.empty()
+        bullets.empty()
 
-    create_fleet(screen, game_settings, aliens, ship)
-    ship.center_ship()
+        create_fleet(screen, game_settings, aliens, ship)
+        pygame.mouse.set_visible(False)
+        ship.center_ship()
 
 def update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats):
     screen.fill(game_setting.bg_color)
@@ -69,7 +82,7 @@ def update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_st
 
     if game_stats.game_over:
         btn_play.draw()
-
+        
     pygame.display.flip()
 
 def create_fleet(screen, game_settings, aliens, ship):
@@ -92,7 +105,6 @@ def update_bullets(bullets, aliens, game_settings, screen, ship):
 
 
     collision = pygame.sprite.groupcollide(aliens, bullets, True, True)
-    print(collision)
 
     if (len(aliens)==0):
         bullets.empty()
@@ -114,7 +126,6 @@ def create_new_alien(screen, game_setings, aliens, alien_index, alien_width, row
 def get_total_rows(screen, ship, alien):
     available_height = screen.get_height() - ship.rect.height - (alien.rect.height*3)
     total_rows = int(available_height / (alien.rect.height * 2))
-    print(f"total row: {total_rows}")
 
     return total_rows
 
@@ -133,6 +144,7 @@ def check_collision(game_settings, aliens):
 def reset_game(game_settings, screen, game_stats, ship, aliens, bullets):
         if game_stats.ship_lives == 0:
             game_stats.game_over = True
+            pygame.mouse.set_visible(True)
         
         else:
             game_stats.ship_lives -= 1
@@ -141,7 +153,8 @@ def reset_game(game_settings, screen, game_stats, ship, aliens, bullets):
             aliens.empty()
 
             create_fleet(screen, game_settings, aliens, ship)
-        
+            ship.center_ship()
+
             sleep(1)
 
 def update_fleet(game_settings, aliens, ship, screen, game_stats, bullets):

@@ -1,7 +1,7 @@
 import pygame
 
 class Button():
-    def __init__(self, screen, game_settings, message):
+    def __init__(self, screen, message):
         self.screen = screen
         self.screen_rect = screen.get_rect()
 
