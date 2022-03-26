@@ -26,7 +26,7 @@ def check_ku_event(event, ship):
         ship.is_moving_left = False
 
 """check for event"""
-def check_event(ship, game_setting, screen, bullets, btn_play, game_stats, aliens, game_settings):
+def check_event(ship, game_setting, screen, bullets, btn_play, game_stats, aliens, game_settings, score):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -47,13 +47,13 @@ def check_event(ship, game_setting, screen, bullets, btn_play, game_stats, alien
                 print("hover")
                 btn_play.bg_color = (40, 101, 158)
                 btn_play.display_message("Play!")
-                update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats)
+                update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats, score)
                 
         else:
             pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
             btn_play.bg_color = (50, 111, 168)
             btn_play.display_message("Play!")
-            update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats)
+            update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats, score)
             
 
 """update scr"""
@@ -70,9 +70,11 @@ def play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings,
         create_fleet(screen, game_settings, aliens, ship)
         pygame.mouse.set_visible(False)
         ship.center_ship()
+        game_settings.init_dynamic_settings
 
-def update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats):
+def update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats, score):
     screen.fill(game_setting.bg_color)
+    score.draw()
 
     for bullet in bullets.sprites():
         bullet.draw()
@@ -87,7 +89,7 @@ def update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_st
 
 def create_fleet(screen, game_settings, aliens, ship):
     alien = Alien(screen, game_settings)
-    gap = 1.5
+    gap = 1.7
     alien_width = alien.rect.width * gap
     total_aliens_on_a_row = get_total_num_of_aliens_on_a_row(game_settings, alien, alien_width, gap)
 
@@ -97,7 +99,7 @@ def create_fleet(screen, game_settings, aliens, ship):
         for alien_index in range(total_aliens_on_a_row):
             create_new_alien(screen, game_settings, aliens, alien_index, alien_width, row)
 
-def update_bullets(bullets, aliens, game_settings, screen, ship):
+def update_bullets(bullets, aliens, game_settings, screen, ship, game_stats, score):
     bullets.update()
     for bullet in bullets.copy():
         if bullet.rect.bottom < 0 :
@@ -105,10 +107,17 @@ def update_bullets(bullets, aliens, game_settings, screen, ship):
 
 
     collision = pygame.sprite.groupcollide(aliens, bullets, True, True)
+    if collision:
+        for aliens in collision.values():  
+            game_stats.score += game_settings.alien_points * len(aliens)
+            score.render_score()
+            print(game_stats.score)
 
     if (len(aliens)==0):
         bullets.empty()
         create_fleet(screen, game_settings, aliens, ship)
+        ship.center_ship()
+        game_settings.increase_speed()
 
 def get_total_num_of_aliens_on_a_row(game_settings, alien, alien_width, gap):
     available_space = game_settings.screen_width -  alien_width
@@ -124,8 +133,9 @@ def create_new_alien(screen, game_setings, aliens, alien_index, alien_width, row
     aliens.add(alien)
 
 def get_total_rows(screen, ship, alien):
-    available_height = screen.get_height() - ship.rect.height - (alien.rect.height*3)
-    total_rows = int(available_height / (alien.rect.height * 2))
+    # available_height = screen.get_height() - ship.rect.height - (alien.rect.height*3)
+    # total_rows = int(available_height / (alien.rect.height * 2))
+    total_rows = 4
 
     return total_rows
 

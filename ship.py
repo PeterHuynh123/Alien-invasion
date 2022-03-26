@@ -7,7 +7,7 @@ class Ship():
         self.setting = setting
 
         self.sprite = pygame.image.load('./sprite/ship.png')
-        self.sprite = pygame.transform.scale(self.sprite, (self.sprite.get_width()//8, self.sprite.get_height()//8))
+        self.sprite = pygame.transform.scale(self.sprite, (self.sprite.get_width()//10, self.sprite.get_height()//10))
         self.rect = self.sprite.get_rect()
         self.screen_rect = screen.get_rect()
 

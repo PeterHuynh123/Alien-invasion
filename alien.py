@@ -8,7 +8,7 @@ class Alien(Sprite):
         self.game_settings = game_settings
 
         self.image = pygame.image.load("./sprite/alien.png")
-        self.image = pygame.transform.scale(self.image, (self.image.get_width()//5, self.image.get_height()//5))
+        self.image = pygame.transform.scale(self.image, (self.image.get_width()//5.3, self.image.get_height()//5.3))
         self.rect = self.image.get_rect()
         self.rect.x = self.rect.width
         self.rect.y = self.rect.height
