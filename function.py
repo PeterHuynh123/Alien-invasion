@@ -104,8 +104,6 @@ def update_bullets(bullets, aliens, game_settings, screen, ship, game_stats, sco
     for bullet in bullets.copy():
         if bullet.rect.bottom < 0 :
             bullets.remove(bullet)
-
-
     collision = pygame.sprite.groupcollide(aliens, bullets, True, True)
     if collision:
         for aliens in collision.values():  
@@ -133,9 +131,8 @@ def create_new_alien(screen, game_setings, aliens, alien_index, alien_width, row
     aliens.add(alien)
 
 def get_total_rows(screen, ship, alien):
-    # available_height = screen.get_height() - ship.rect.height - (alien.rect.height*3)
-    # total_rows = int(available_height / (alien.rect.height * 2))
-    total_rows = 4
+    available_height = screen.get_height() - ship.rect.height - (alien.rect.height*3)
+    total_rows = int(available_height / (alien.rect.height * 2))
 
     return total_rows
 

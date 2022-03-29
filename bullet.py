@@ -16,7 +16,7 @@ class Bullet(Sprite):
 
         self.y = (self.rect.y)
         self.speed = setting.bullet_speed
-        self.color = setting.bullet_speed
+        self.color = (50, 50, 50)
 
     def update(self):
         self.y -= self.speed

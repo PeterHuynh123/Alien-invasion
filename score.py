@@ -37,7 +37,7 @@ class Score():
         skip_num = len(num)%3
         for k in range(skip_num):
             new_num += num[k]
-            if skip_num == 0:
+            if k == skip_num-1:
                 new_num += ','
         for i in range(len(num)-skip_num):
             if i % 3 == 0 and i != 0:
