@@ -1,0 +1,2 @@
+SCORE_TYPE_NORMAL = 'normal'
+SCORE_TYPE_HIGHSCORE = 'highscore'

@@ -8,7 +8,7 @@ class Setting():
         self.bg_color = (200, 200, 200)
         
         self.ship_speed = 10
-        self.ship_lives = 3
+        self.ship_lives = 1
 
         self.bullet_width = 5
         self.bullet_height = 10
@@ -18,11 +18,11 @@ class Setting():
 
         self.alien_speed = 3
         self.alien_fleet_direction = 1 #-1 is left
-        self.alien_fleet_drop_speed = 5
+        self.alien_fleet_drop_speed = 15
 
         self.alien_points = 10
 
-        self.speeed_factor = 1.1
+        self.speed_factor = 1.3
 
         self.init_dynamic_settings()
 
@@ -30,12 +30,13 @@ class Setting():
         self.ship_speed = 12
         self.bullet_speed = 10
         self.alien_speed = 5
-        self.alien_fleet_direction = 1
+        self.alien_fleet_direction = 2
 
     def increase_speed(self):
-        self.ship_speed = self.ship_speed * self.speeed_factor
-        self.bullet_speed = self.bullet_speed * self.speeed_factor
-        self.alien_speed = self.alien_speed * self.speeed_factor
-
-
+        self.ship_speed = self.ship_speed * self.speed_factor
+        self.bullet_speed = self.bullet_speed * self.speed_factor
+        self.alien_speed = self.alien_speed * self.speed_factor
+        print(self.ship_speed)
+        print(self.bullet_speed)
+        print(self.alien_speed)
 

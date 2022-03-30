@@ -43,7 +43,7 @@ def main():
 
             func.update_bullets(bullets, aliens, game_setting, screen, ship, game_stats, score)
 
-            func.update_fleet(game_setting, aliens, ship, screen, game_stats, bullets)
+            func.update_fleet(game_setting, aliens, ship, screen, game_stats, bullets, score)
 
             func.update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats, score)
         

@@ -3,7 +3,7 @@ import pygame
 import sys
 from alien import Alien
 from time import sleep
-
+from constant import *
 """update pos by k_d/k_u event"""
 def check_kd_event(event, ship, setting, screen, bullets):
     if event.key == pygame.K_ESCAPE:
@@ -34,17 +34,16 @@ def check_event(ship, game_setting, screen, bullets, btn_play, game_stats, alien
         if event.type == pygame.KEYDOWN:
             check_kd_event(event, ship, game_setting, screen, bullets)
             if event.key == pygame.K_RETURN and game_stats.game_over == True:
-                play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings, ship)
+                reset_game(game_settings, screen, game_stats, ship, aliens, bullets, score)
         elif event.type == pygame.KEYUP:
             check_ku_event(event, ship)
 
         mouse_x, mouse_y = pygame.mouse.get_pos()
         if btn_play.rect.collidepoint(mouse_x, mouse_y):
             if event.type == pygame.MOUSEBUTTONDOWN:
-                play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings, ship)
+                play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings, ship, score)
             else:
                 pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
-                print("hover")
                 btn_play.bg_color = (40, 101, 158)
                 btn_play.display_message("Play!")
                 update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats, score)
@@ -57,12 +56,21 @@ def check_event(ship, game_setting, screen, bullets, btn_play, game_stats, alien
             
 
 """update scr"""
+def game_start(game_settings, screen, ship, aliens, bullets):
+    bullets.empty()
+    aliens.empty()
 
-def play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings, ship):
+    create_fleet(screen, game_settings, aliens, ship)
+    ship.center_ship()
+
+    sleep(1)
+
+def play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings, ship, score):
     if game_stats.game_over == True:
         
         game_stats.game_over = False
         game_stats.reset_statistic()
+        score.render_score(SCORE_TYPE_NORMAL)
 
         aliens.empty()
         bullets.empty()
@@ -70,7 +78,7 @@ def play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings,
         create_fleet(screen, game_settings, aliens, ship)
         pygame.mouse.set_visible(False)
         ship.center_ship()
-        game_settings.init_dynamic_settings
+        game_settings.init_dynamic_settings()
 
 def update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats, score):
     screen.fill(game_setting.bg_color)
@@ -108,8 +116,7 @@ def update_bullets(bullets, aliens, game_settings, screen, ship, game_stats, sco
     if collision:
         for aliens in collision.values():  
             game_stats.score += game_settings.alien_points * len(aliens)
-            score.render_score()
-            print(game_stats.score)
+            score.render_score(SCORE_TYPE_NORMAL)
 
     if (len(aliens)==0):
         bullets.empty()
@@ -148,10 +155,11 @@ def check_collision(game_settings, aliens):
             change_fleet_direction(game_settings, aliens)
             break
         
-def reset_game(game_settings, screen, game_stats, ship, aliens, bullets):
+def reset_game(game_settings, screen, game_stats, ship, aliens, bullets, score):
         if game_stats.ship_lives == 0:
             game_stats.game_over = True
             pygame.mouse.set_visible(True)
+            game_start(game_settings, screen, ship, aliens, bullets)
         
         else:
             game_stats.ship_lives -= 1
@@ -164,18 +172,19 @@ def reset_game(game_settings, screen, game_stats, ship, aliens, bullets):
 
             sleep(1)
 
-def update_fleet(game_settings, aliens, ship, screen, game_stats, bullets):
+def update_fleet(game_settings, aliens, ship, screen, game_stats, bullets, score):
     check_collision(game_settings, aliens,)
     aliens.update()
 
     if pygame.sprite.spritecollideany(ship, aliens):
-       reset_game(game_settings, screen, game_stats, ship, aliens, bullets)
+       reset_game(game_settings, screen, game_stats, ship, aliens, bullets, score)
 
-    aliens_hit_bottom(game_settings, screen, game_stats, ship, aliens, bullets)
-def aliens_hit_bottom(game_settings, screen, game_stats, ship, aliens, bullets):
+    aliens_hit_bottom(game_settings, screen, game_stats, ship, aliens, bullets, score)
+
+def aliens_hit_bottom(game_settings, screen, game_stats, ship, aliens, bullets, score):
     screen.get_rect()
 
     for alien in aliens.sprites():
         if alien.rect.bottom > screen.get_rect().bottom:
-            reset_game(game_settings, screen, game_stats, ship, aliens, bullets)
+            reset_game(game_settings, screen, game_stats, ship, aliens, bullets, score)
             break
