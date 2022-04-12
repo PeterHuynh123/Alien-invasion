@@ -9,6 +9,7 @@ from ship import Ship
 from Stats import Stats
 from pygame.sprite import Group
 from score import Score
+import json
 
 from time import sleep
 def main():

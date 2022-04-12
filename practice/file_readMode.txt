@@ -1,0 +1,2 @@
+r - default mode: just for rading through the file
+ 

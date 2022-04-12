@@ -16,7 +16,7 @@ class Setting():
         self.bullet_cl = 255, 0, 0
         self.bullet_max_allowed = 3
 
-        self.alien_speed = 3
+        self.alien_speed = 20
         self.alien_fleet_direction = 1 #-1 is left
         self.alien_fleet_drop_speed = 15
 
@@ -27,9 +27,9 @@ class Setting():
         self.init_dynamic_settings()
 
     def init_dynamic_settings(self):
-        self.ship_speed = 12
+        self.ship_speed = 10
         self.bullet_speed = 10
-        self.alien_speed = 5
+        self.alien_speed = 2
         self.alien_fleet_direction = 2
 
     def increase_speed(self):

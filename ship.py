@@ -1,15 +1,17 @@
 import pygame
-from function import create_fleet
+from pygame.sprite import Sprite
+
 
 class Ship():
     def __init__(self, screen, setting):
+        super(Ship, self).__init__()
         self.screen = screen
         self.setting = setting
 
         self.sprite = pygame.image.load('./sprite/ship.png')
         self.sprite = pygame.transform.scale(self.sprite, (self.sprite.get_width()//10, self.sprite.get_height()//10))
         self.rect = self.sprite.get_rect()
-        self.screen_rect = screen.get_rect()
+        self.screen_rect = self.screen.get_rect()
 
         self.is_moving_right = False
         self.is_moving_left = False

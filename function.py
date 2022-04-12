@@ -4,8 +4,9 @@ import sys
 from alien import Alien
 from time import sleep
 from constant import *
+import json
 """update pos by k_d/k_u event"""
-def check_kd_event(event, ship, setting, screen, bullets):
+def check_kd_event(event, ship, setting, screen, bullets, game_stats):
     if event.key == pygame.K_ESCAPE:
             sys.exit() 
     if event.key == pygame.K_RIGHT:
@@ -18,6 +19,8 @@ def check_kd_event(event, ship, setting, screen, bullets):
         if len(bullets) < setting.bullet_max_allowed:
             new_bullet = Bullet(setting, screen, ship)
             bullets.add(new_bullet)
+    elif event.key == pygame.K_RETURN:
+        setting.increase_speed()
 
 def check_ku_event(event, ship):
     if event.key == pygame.K_RIGHT:
@@ -32,7 +35,7 @@ def check_event(ship, game_setting, screen, bullets, btn_play, game_stats, alien
             sys.exit()
 
         if event.type == pygame.KEYDOWN:
-            check_kd_event(event, ship, game_setting, screen, bullets)
+            check_kd_event(event, ship, game_setting, screen, bullets, game_stats)
             if event.key == pygame.K_RETURN and game_stats.game_over == True:
                 reset_game(game_settings, screen, game_stats, ship, aliens, bullets, score)
         elif event.type == pygame.KEYUP:
@@ -56,10 +59,10 @@ def check_event(ship, game_setting, screen, bullets, btn_play, game_stats, alien
             
 
 """update scr"""
-def game_start(game_settings, screen, ship, aliens, bullets):
+def game_start(game_settings, screen, ship, aliens, bullets, score  ):
     bullets.empty()
     aliens.empty()
-
+    score.render_level()
     create_fleet(screen, game_settings, aliens, ship)
     ship.center_ship()
 
@@ -67,10 +70,10 @@ def game_start(game_settings, screen, ship, aliens, bullets):
 
 def play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings, ship, score):
     if game_stats.game_over == True:
-        
+        overwrite_highscore(game_stats)
         game_stats.game_over = False
         game_stats.reset_statistic()
-        score.render_score(SCORE_TYPE_NORMAL)
+        # score.render_score(SCORE_TYPE_NORMAL)
 
         aliens.empty()
         bullets.empty()
@@ -117,12 +120,16 @@ def update_bullets(bullets, aliens, game_settings, screen, ship, game_stats, sco
         for aliens in collision.values():  
             game_stats.score += game_settings.alien_points * len(aliens)
             score.render_score(SCORE_TYPE_NORMAL)
+        replace_highscore(game_stats, score)
 
     if (len(aliens)==0):
         bullets.empty()
         create_fleet(screen, game_settings, aliens, ship)
         ship.center_ship()
         game_settings.increase_speed()
+        game_stats.level += 1
+        score.render_level()
+        sys.sleep(1)
 
 def get_total_num_of_aliens_on_a_row(game_settings, alien, alien_width, gap):
     available_space = game_settings.screen_width -  alien_width
@@ -159,8 +166,9 @@ def reset_game(game_settings, screen, game_stats, ship, aliens, bullets, score):
         if game_stats.ship_lives == 0:
             game_stats.game_over = True
             pygame.mouse.set_visible(True)
-            game_start(game_settings, screen, ship, aliens, bullets)
-        
+            game_start(game_settings, screen, ship, aliens, bullets, score)
+            game_stats.reset_statistic()   
+            game_stats.ship_lives -= 1     
         else:
             game_stats.ship_lives -= 1
 
@@ -188,3 +196,20 @@ def aliens_hit_bottom(game_settings, screen, game_stats, ship, aliens, bullets, 
         if alien.rect.bottom > screen.get_rect().bottom:
             reset_game(game_settings, screen, game_stats, ship, aliens, bullets, score)
             break
+
+def replace_highscore(game_stats, score):
+    if game_stats.score > game_stats.high_score:
+        game_stats.high_score = game_stats.score
+        score.render_score(SCORE_TYPE_HIGHSCORE)
+
+def overwrite_highscore(game_stats):
+    file_content = ''
+    with open ("./data.json", "r") as file_r:
+        file_content = json.load(file_r)
+        if file_content["high_score"] < game_stats.high_score:
+            file_content["high_score"] = game_stats.high_score
+
+        with open ("./data.json", "w") as file_w:
+            json.dump(file_content, file_w, indent=4)
+            file_w.close()
+        file_r.close()
