@@ -8,7 +8,7 @@ class Setting():
         self.bg_color = (200, 200, 200)
         
         self.ship_speed = 10
-        self.ship_lives = 1
+        self.ship_lives = 3
 
         self.bullet_width = 5
         self.bullet_height = 10
@@ -16,9 +16,9 @@ class Setting():
         self.bullet_cl = 255, 0, 0
         self.bullet_max_allowed = 3
 
-        self.alien_speed = 20
+        self.alien_speed = 5
         self.alien_fleet_direction = 1 #-1 is left
-        self.alien_fleet_drop_speed = 15
+        self.alien_fleet_drop_speed = 10
 
         self.alien_points = 10
 

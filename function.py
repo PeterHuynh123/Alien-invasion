@@ -163,12 +163,12 @@ def check_collision(game_settings, aliens):
             break
         
 def reset_game(game_settings, screen, game_stats, ship, aliens, bullets, score):
-        if game_stats.ship_lives == 0:
+        if game_stats.ship_lives == 1:
             game_stats.game_over = True
             pygame.mouse.set_visible(True)
-            game_start(game_settings, screen, ship, aliens, bullets, score)
-            game_stats.reset_statistic()   
-            game_stats.ship_lives -= 1     
+            game_stats.reset_statistic() 
+            game_start(game_settings, screen, ship, aliens, bullets, score)    
+            print(game_stats.ship_lives)
         else:
             game_stats.ship_lives -= 1
 
@@ -177,7 +177,6 @@ def reset_game(game_settings, screen, game_stats, ship, aliens, bullets, score):
 
             create_fleet(screen, game_settings, aliens, ship)
             ship.center_ship()
-
             sleep(1)
 
 def update_fleet(game_settings, aliens, ship, screen, game_stats, bullets, score):

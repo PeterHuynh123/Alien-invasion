@@ -11,10 +11,11 @@ class Ship():
         self.sprite = pygame.image.load('./sprite/ship.png')
         self.sprite = pygame.transform.scale(self.sprite, (self.sprite.get_width()//10, self.sprite.get_height()//10))
         self.rect = self.sprite.get_rect()
-        self.screen_rect = self.screen.get_rect()
+        self.screen_rect = screen.get_rect()
 
         self.is_moving_right = False
         self.is_moving_left = False
+        self.lives = None
         
         self.rect.centerx = self.screen_rect.centerx
         self.rect.bottom = self.screen_rect.bottom

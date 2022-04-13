@@ -14,6 +14,8 @@ class Score():
         self.text_color = (50, 50, 50)
         self.bg_color = (200, 200, 200)
         self.font = pygame.font.Font(None, 48)
+        self.sprite = pygame.image.load('./sprite/ship.png')
+        self.sprite = pygame.transform.scale(self.sprite, (self.sprite.get_width()//15, self.sprite.get_height()//15))
         
         self.render_level()   
         self.render_score(SCORE_TYPE_NORMAL)
@@ -24,7 +26,6 @@ class Score():
     def render_score(self, score_type):
         # rounded_score = int(round(self.game_stats.score, -1))
         # score = "{:,}".format(rounded_score)
-
         if score_type == SCORE_TYPE_NORMAL:
             rounded_score = int(self.game_stats.score)
             score = self.format_num(rounded_score)
@@ -46,7 +47,7 @@ class Score():
         self.screen.blit(self.normal_score, self.normal_score_rect)
         self.screen.blit(self.high_score, self.high_score_rect)
         self.screen.blit(self.rendered_level, self.rendered_level_rect)
-
+        self.render_lives()
 
 
     def format_num(self, num):
@@ -73,9 +74,10 @@ class Score():
         self.rendered_level_rect.top = 10
 
     def render_lives(self):
-        self.lives = Group()
-        for ship_lives in range(self.game_stats.ship_lives):
-            live = Ship(self.game_settings, self.screen)
-            live.rect.x = self.gap + ship_lives * live.rect.width
-            live.y = self.gap
-            self.lives.add(live)
+        # self.lives = Group()
+        live = self.sprite
+        for ship_lives in range(1, self.game_stats.ship_lives+1):
+            live_rect = live.get_rect()
+            live_rect.x = self.screen_rect.right - self.gap - ((self.gap + live_rect.width) * (ship_lives))
+            live_rect.y = self.high_score_rect.bottom + self.gap
+            self.screen.blit(live, live_rect)
