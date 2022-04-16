@@ -49,12 +49,6 @@ def main():
             func.update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats, score)
         
             clock.tick(60)
-        
-        else:
-            pygame.display.flip()
-
-
-        
 
 if __name__ == "__main__":
     main()

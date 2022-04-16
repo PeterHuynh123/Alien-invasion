@@ -14,6 +14,7 @@ class Stats:
         self.ship_lives = self.game_setting.ship_lives
         self.score = 0
         self.level = 1
+        print("function called")
     def read_high_score(self):
         with open ("./data.json", 'r') as file:
             data = json.load(file)

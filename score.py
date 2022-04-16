@@ -49,7 +49,6 @@ class Score():
         self.screen.blit(self.rendered_level, self.rendered_level_rect)
         self.render_lives()
 
-
     def format_num(self, num):
         num = str(num)
         if len(num) <= 3:
