@@ -1,11 +1,13 @@
 from pygame import init
+import pygame
 
 
 class Setting():
     def __init__(self):
         self.screen_width = 900
         self.screen_height = 600
-        self.bg_color = (200, 200, 200)
+        self.bg = pygame.image.load("./bg.png")
+        self.bg = pygame.transform.scale(self.bg, (self.screen_width, self.screen_height))
         
         self.ship_speed = 10
         self.ship_lives = 3
@@ -19,6 +21,8 @@ class Setting():
         self.alien_speed = 5
         self.alien_fleet_direction = 1 #-1 is left
         self.alien_fleet_drop_speed = 10
+
+        self.sound_volume = 0.5
 
         self.alien_points = 10
 
