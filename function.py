@@ -15,11 +15,12 @@ def check_kd_event(event, ship, setting, screen, bullets, game_stats, aliens, ga
             sound.bgm.set_volume(0.08)
     if event.key == pygame.K_ESCAPE and game_stats.game_state == GAME_STATE_MENU:
             sys.exit() 
-    elif event.key == pygame.K_h and game_stats.game_state == GAME_STATE_PLAY:
+    if event.key == pygame.K_h and game_stats.game_state == GAME_STATE_PLAY:
             menu.draw_menu_frame()
             game_stats.game_state == GAME_STATE_MENU
+            pygame.display.flip()
             
-    elif event.key == pygame.K_DELETE:
+    elif event.key == pygame.K_RETURN:
         if game_stats.game_state == GAME_STATE_MENU:
             game_stats.game_state = GAME_STATE_PLAY
 
@@ -35,13 +36,9 @@ def check_kd_event(event, ship, setting, screen, bullets, game_stats, aliens, ga
                 new_bullet = Bullet(setting, screen, ship)
                 bullets.add(new_bullet)
                 sound.shoot.play()
-        elif event.key == pygame.K_RETURN:
-            play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings, ship, score)
-            # game_start(game_settings, screen, ship, aliens, bullets, score  )
-        elif event.key == pygame.K_1:
-            setting.increase_speed()
-        elif event.key == pygame.K_2:
-            aliens.empty() 
+        # elif event.key == pygame.K_RETURN:
+        #     start_a_new_game(game_stats, aliens, bullets, screen, game_settings, ship, score)
+            
 def check_ku_event(event, ship):
     if event.key == pygame.K_RIGHT:
         ship.is_moving_right = False
@@ -53,7 +50,6 @@ def check_event(ship, game_setting, screen, bullets, btn_play, game_stats, alien
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-
         if event.type == pygame.KEYDOWN:
             check_kd_event(event, ship, game_settings, screen, bullets, game_stats, aliens, game_settings, score, sound, menu)
             if event.key == pygame.K_RETURN and game_stats.game_over == True:
@@ -64,7 +60,7 @@ def check_event(ship, game_setting, screen, bullets, btn_play, game_stats, alien
             mouse_x, mouse_y = pygame.mouse.get_pos()
             if btn_play.rect.collidepoint(mouse_x, mouse_y):
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings, ship, score)
+                    start_a_new_game(game_stats, aliens, bullets, screen, game_settings, ship, score)
                 else:
                     pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
                     btn_play.bg_color = (40, 101, 158)
@@ -91,7 +87,8 @@ def game_start(game_settings, screen, ship, aliens, bullets, score, game_stats):
 
     sleep(1)
 
-def play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings, ship, score):
+def start_a_new_game(game_stats, aliens, bullets, screen, game_settings, ship, score):
+    # print("hi")
     if game_stats.game_over == True:
         overwrite_highscore(game_stats)
         game_stats.game_over = False
@@ -107,6 +104,25 @@ def play_btn_onClick_handler(game_stats, aliens, bullets, screen, game_settings,
         game_settings.init_dynamic_settings()
         score.render_score(SCORE_TYPE_NORMAL)
         score.render_level()
+    game_stats.reset_statistic()
+    game_stats.game_over = False
+    
+    aliens.empty()
+    bullets.empty()
+    
+    # re-render the stat images
+    score.render_score(SCORE_TYPE_NORMAL)
+    score.render_score(SCORE_TYPE_HIGHSCORE)
+    score.render_level()
+
+    create_fleet(screen, game_settings, aliens, ship)
+    ship.center_ship()
+    
+    score.render_level()
+    score.render_score(SCORE_TYPE_NORMAL)
+    score.render_score(SCORE_TYPE_HIGHSCORE)
+    score.render_lives()
+    
 
 def update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats, score):
     screen.blit(game_setting.bg, (0, 0))

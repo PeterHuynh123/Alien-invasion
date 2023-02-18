@@ -10,7 +10,7 @@ from Stats import Stats
 from pygame.sprite import Group
 from score import Score
 import json
-from sound import *
+from Sound import *
 from constant import *
 from menu import *
 
@@ -47,7 +47,13 @@ def main():
         
         if game_stats.game_state == GAME_STATE_MENU:
             menu.draw_menu_frame()
-        
+            pygame.mouse.set_visible(True)
+            for event in pygame.event.get():
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                if menu.play_button.rect.collidepoint(mouse_x, mouse_y):
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        game_stats.game_state == game
+                        print("clicked")
         else:
             if game_stats.game_over == False:
                 btn_play.draw()
