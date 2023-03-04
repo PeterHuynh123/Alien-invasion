@@ -14,8 +14,10 @@ def check_kd_event(event, ship, setting, screen, bullets, game_stats, sound, men
         else:
             sound.bgm.set_volume(0.08)
     if event.key == pygame.K_ESCAPE and game_stats.game_state == GAME_STATE_MENU:
+            overwrite_highscore(game_stats)
             sys.exit() 
     elif event.key == pygame.K_ESCAPE and game_stats.game_state == GAME_STATE_PLAY:
+            overwrite_highscore(game_stats)
             game_stats.game_state = GAME_STATE_MENU
             
     elif event.key == pygame.K_RETURN:
@@ -47,7 +49,9 @@ def check_ku_event(event, ship):
 def check_event(ship, game_setting, screen, bullets, btn_play, game_stats, aliens, game_settings, score, sound, menu):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            overwrite_highscore(game_stats)
             sys.exit()
+            
             
             
         if event.type == pygame.KEYDOWN:
