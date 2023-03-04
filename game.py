@@ -36,7 +36,7 @@ def main():
 
     func.create_fleet(screen, game_setting, aliens, ship)
 
-    btn_play = Button(screen, "PLAY!!") 
+    btn_play = Button(screen, "Hit ENTER!!") 
     score = Score(game_setting, screen, game_stats)
     
     pygame.mouse.set_visible(False)
@@ -52,7 +52,8 @@ def main():
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 if menu.play_button.rect.collidepoint(mouse_x, mouse_y):
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        game_stats.game_state == game
+                        game_stats.game_state == GAME_STATE_PLAY
+                        func.start_a_new_game(game_stats, aliens, bullets, screen, game_setting, ship, score)
                         print("clicked")
         else:
             if game_stats.game_over == False:

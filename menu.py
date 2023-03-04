@@ -9,6 +9,7 @@ class Menu():
         self.font_img = self.font.render(msg, True, (50, 50, 50), (200, 200 ,200))
         self.font_img_rect = self.font_img.get_rect()
         self.play_button = Button(screen, "Play")
+    
     def draw_menu_frame(self):
         self.screen.fill((200, 200 ,200))
         self.screen.blit(self.font_img, (self.screen_rect.centerx - self.font_img_rect.centerx, 200))

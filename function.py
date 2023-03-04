@@ -6,7 +6,7 @@ from time import sleep
 from constant import *
 import json
 """update pos by k_d/k_u event"""
-def check_kd_event(event, ship, setting, screen, bullets, game_stats, aliens, game_settings, score, sound, menu):
+def check_kd_event(event, ship, setting, screen, bullets, game_stats, sound, menu):
     if event.key == pygame.K_m:
         vol = sound.bgm.get_volume()
         if vol > 0:
@@ -15,10 +15,8 @@ def check_kd_event(event, ship, setting, screen, bullets, game_stats, aliens, ga
             sound.bgm.set_volume(0.08)
     if event.key == pygame.K_ESCAPE and game_stats.game_state == GAME_STATE_MENU:
             sys.exit() 
-    if event.key == pygame.K_h and game_stats.game_state == GAME_STATE_PLAY:
-            menu.draw_menu_frame()
-            game_stats.game_state == GAME_STATE_MENU
-            pygame.display.flip()
+    elif event.key == pygame.K_ESCAPE and game_stats.game_state == GAME_STATE_PLAY:
+            game_stats.game_state = GAME_STATE_MENU
             
     elif event.key == pygame.K_RETURN:
         if game_stats.game_state == GAME_STATE_MENU:
@@ -50,29 +48,45 @@ def check_event(ship, game_setting, screen, bullets, btn_play, game_stats, alien
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
+            
+            
         if event.type == pygame.KEYDOWN:
-            check_kd_event(event, ship, game_settings, screen, bullets, game_stats, aliens, game_settings, score, sound, menu)
+            check_kd_event(event, ship, game_setting, screen, bullets, game_stats, sound, menu)
             if event.key == pygame.K_RETURN and game_stats.game_over == True:
                 reset_game(game_settings, screen, game_stats, ship, aliens, bullets, score, sound)
         elif event.type == pygame.KEYUP:
             check_ku_event(event, ship)
+            
+            
         if game_stats.game_state == GAME_STATE_PLAY:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             if btn_play.rect.collidepoint(mouse_x, mouse_y):
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     start_a_new_game(game_stats, aliens, bullets, screen, game_settings, ship, score)
+                    pygame.display.flip()
                 else:
                     pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
                     btn_play.bg_color = (40, 101, 158)
                     btn_play.display_message("Play!")
                     update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats, score)
-                    
             else:
                 pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
                 btn_play.bg_color = (50, 111, 168)
                 btn_play.display_message("Play!")
                 update_screen(game_setting, ship, screen, bullets, aliens, btn_play, game_stats, score)
-            
+                
+                
+        if game_stats.game_state == GAME_STATE_MENU:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            if btn_play.rect.collidepoint(mouse_x, mouse_y):
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    start_a_new_game(game_stats, aliens, bullets, screen, game_settings, ship, score)
+                    game_stats.game_state = GAME_STATE_PLAY
+                    pygame.display.flip()
+                else:
+                    pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
+                    btn_play.bg_color = (40, 101, 158)
+                    btn_play.display_message("Play!")
 
 """update scr"""
 def game_start(game_settings, screen, ship, aliens, bullets, score, game_stats):
